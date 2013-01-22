@@ -55,6 +55,10 @@ class Command(BaseCommand):
                 for rel in related_fields:
                     try:
                         add_to_serialize_list(obj.__getattribute__(rel).all())
+                    except AttributeError:
+                        # maybe it's manytoone
+                        add_to_serialize_list( [ obj.__getattribute__(rel) ] )
+
                     except FieldError:
                         pass
                     except ObjectDoesNotExist:
